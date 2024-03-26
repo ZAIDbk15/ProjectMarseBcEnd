@@ -1,32 +1,23 @@
 package service;
 
-import dao.ProduitDAO;
+import model.Produit;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import util.HibernateUtil;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import model.Categorie;
-import model.Produit;
-import util.HibernateUtil;
-
-@ManagedBean(name = "produitService", eager = true)
-@RequestScoped
-public class ProduitDAOImpl implements Serializable, ProduitDAO{
+@Path("/produits")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public class ProduitDAOImplApi implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = Logger.getLogger(CategorieDAOImpl.class.getName());
-
-    public ProduitDAOImpl() {
-    }
-
-
-
     private final SessionFactory sessionFactory = getSessionFactory();
 
     protected SessionFactory getSessionFactory() {
@@ -38,46 +29,9 @@ public class ProduitDAOImpl implements Serializable, ProduitDAO{
         }
     }
 
-    public void addProduit(Produit produit) {
-        Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.persist(produit);
-        session.getTransaction().commit();
-        logger.info("Product successfully saved, Product Details="+produit);
-    }
-
-    public void updateProduit(Produit produit){
-        Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.merge(produit);
-        session.getTransaction().commit();
-        logger.info("Product successfully updated, Product Details="+produit);
-    }
-    public List<Produit> listProduits(){
-        Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        List<Produit> productsList = session.createQuery("from Produit", Produit.class).list();
-        session.getTransaction().commit();
-        return productsList;
-    }
-
-    public List<Produit> listProduitsByCategorie(Categorie categ){
-        Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        List<Produit> productsList = session.createQuery("from Produit p where p.categorie.id="+categ.getId(),Produit.class).list();
-        session.getTransaction().commit();
-        return productsList;
-    }
-
-    public List<Produit> selectProdByKeyword(String keyWord){
-        Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        List<Produit> productsList = session.createQuery("from Produit p WHERE p.designation LIKE '%"+keyWord+"%'", Produit.class).list();
-        session.getTransaction().commit();
-        return productsList;
-    }
-
-    public Produit getProduitById(int id){
+    @GET
+    @Path("/{id}")
+    public Produit getProduitByIdapi(@PathParam("id") int id){
         Session session = this.sessionFactory.getCurrentSession();
         session.beginTransaction();
         Produit produit = session.getReference(Produit.class, Integer.valueOf(id));
@@ -85,7 +39,46 @@ public class ProduitDAOImpl implements Serializable, ProduitDAO{
         return produit;
     }
 
-    public void removeProduit(int id){
+    @GET
+    @Path("/")
+    public List<Produit> listProduitsapi(){
+        Session session = this.sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        List<Produit> productsList = session.createQuery("from Produit", Produit.class).list();
+        session.getTransaction().commit();
+        return productsList;
+    }
+    @PUT
+    @Path("/")
+    public void updateProduitApi(Produit produit){
+        Session session = this.sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        session.merge(produit);
+        session.getTransaction().commit();
+        logger.info("Product successfully updated, Product Details="+produit);
+    }
+    @POST
+    @Path("/")
+    public void addProduitApi(Produit produit) {
+        Session session = this.sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        session.persist(produit);
+        session.getTransaction().commit();
+        logger.info("Product successfully saved, Product Details="+produit);
+    }
+
+    @GET
+    @Path("/keyword/{keyword}")
+    public List<Produit> selectProdByKeywordApi(@PathParam("keyword")  String keyWord){
+        Session session = this.sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        List<Produit> productsList = session.createQuery("from Produit p WHERE p.designation LIKE '%"+keyWord+"%'", Produit.class).list();
+        session.getTransaction().commit();
+        return productsList;
+    }
+    @DELETE
+    @Path("/{id}")
+    public void removeProduit( @PathParam("id") int id){
         Session session = this.sessionFactory.getCurrentSession();
         session.beginTransaction();
         Produit produit = session.getReference(Produit.class, Integer.valueOf(id));
@@ -96,6 +89,4 @@ public class ProduitDAOImpl implements Serializable, ProduitDAO{
         session.getTransaction().commit();
         logger.info("Product deleted successfully, Product details="+produit);
     }
-
-
 }
