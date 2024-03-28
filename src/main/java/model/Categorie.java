@@ -2,6 +2,8 @@ package model;
 
 import java.io.Serializable;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 
@@ -20,6 +22,7 @@ public class Categorie implements Serializable {
 
     //bi-directional many-to-one association to Produit
     @OneToMany(mappedBy="categorie")
+    @JsonIgnore
     private List<Produit> produits;
 
     public Categorie() {
