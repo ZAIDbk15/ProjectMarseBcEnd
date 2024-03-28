@@ -4,6 +4,7 @@ import dao.CategorieDAO;
 import model.Categorie;
 import model.Produit;
 import org.apache.commons.io.FileUtils;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.file.UploadedFile;
 import service.CategorieDAOImpl;
 import service.ProduitDAOImpl;
@@ -13,6 +14,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import java.io.*;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +39,7 @@ public class ProduitCategories implements Serializable {
     private ProduitDAOImpl produitDao = new ProduitDAOImpl();
     private boolean editMode = false;
     private boolean addMode = false;
-
+    private String path;
     private UploadedFile photo;
     public UploadedFile getPhoto() {
         return photo;
@@ -99,21 +101,17 @@ public class ProduitCategories implements Serializable {
         addMode=false;
     }
 
-    public void addProduit(){
-
-        if(productToAdd!=null) {
-            produitToAdd.setCategorie(selectedCategorie);
-            // Reattach the entity to the Hibernate session
-          //  productToAdd = produitService.mergeProduit(productToAdd);
+    public void addProduit() {
+        if (productToAdd != null) {
+            productToAdd.setCategorie(selectedCategorie);
             produitService.addProduit(productToAdd);
-            System.out.println("Ajout de la Produit avec Succès");
-            addMessage(FacesMessage.SEVERITY_INFO, "Ajout Réussi", "Ajout de la Produit avec Succès");
-        }else {
-            addMessage(FacesMessage.SEVERITY_WARN, "Ajout échoué", "Erreur lors de l'ajout de la Produit");
+            System.out.println("Ajout du produit avec Succès");
+            addMessage(FacesMessage.SEVERITY_INFO, "Ajout Réussi", "Ajout du produit avec Succès");
+        } else {
+            addMessage(FacesMessage.SEVERITY_WARN, "Ajout échoué", "Erreur lors de l'ajout du produite");
         }
-        addMode=false;
+        addMode = false;
     }
-
     public void updateProduit(){
         if(selectedProduit!=null) {
             System.out.println("Updating... => "+ selectedProduit);
@@ -244,12 +242,67 @@ public class ProduitCategories implements Serializable {
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(severity, summary, detail));
     }
+    public void copyFile(String fileName, InputStream in) {
+        try {
+            OutputStream out = new FileOutputStream(new File(fileName));
 
+            int read = 0;
+            byte[] bytes = new byte[1024];
+
+            while ((read = in.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+            in.close();
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            System.out.println("Erreur dans CopyFile !");
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void upload(FileUploadEvent event) {
+        System.out.println("**************** Calling upload ! ****************");
+
+        if (photo != null) {
+            FacesMessage message = new FacesMessage("Succesful", photo.getFileName() + " is uploaded.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
+            try {
+                copyFile(getPath() + event.getFile().getFileName(), event.getFile().getInputStream());
+            } catch (IOException e) {
+                System.out.println("Erreur dans upload !");
+                e.printStackTrace();
+            }
+            System.out.println("Upload avec Succès");
+        } else {
+            System.out.println("File n'est pas différent de NULL");
+        }
+    }
     public Categorie getSelectedCategorie() {
         return selectedCategorie;
     }
 
     public void setSelectedCategorie(Categorie selectedCategorie) {
         this.selectedCategorie = selectedCategorie;
+    }
+
+    public Categorie getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(Categorie categorie) {
+        this.categorie = categorie;
+    }
+
+    public String getPath() {
+        ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext()
+                .getContext();
+        path = servletContext.getRealPath("") + "images" + File.separator + "photos";
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

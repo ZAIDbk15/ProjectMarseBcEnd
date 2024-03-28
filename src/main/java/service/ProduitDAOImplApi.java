@@ -71,16 +71,21 @@ public class ProduitDAOImplApi implements Serializable {
 
 
     @GET
-    @Path("/get")
+    @Path("/getAll")
     public List<Map<String, Object>> listProducts2() {
-        Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        List<Produit> productList = session.createQuery("from Produit ", Produit.class).list();
-        session.getTransaction().commit();
+        try {
+            Session session = this.sessionFactory.getCurrentSession();
+            session.beginTransaction();
+            List<Produit> productList = session.createQuery("from Produit ", Produit.class).list();
+            session.getTransaction().commit();
 
-        return productList.stream()
-                .map(this::convertToMap)
-                .collect(Collectors.toList());
+            return productList.stream()
+                    .map(this::convertToMap)
+                    .collect(Collectors.toList());
+        }catch (Exception e ){
+            System.out.println("test fail + "+e);
+        }
+       return null;
     }
 
     private Map<String, Object> convertToMap(Produit product) {
@@ -91,8 +96,16 @@ public class ProduitDAOImplApi implements Serializable {
         map.put("quantite", product.getQuantite());
         map.put("sdr", product.getSdr());
         map.put("photo", product.getPhoto());
-        map.put("categoryId", product.getCategorie().getId());
-        map.put("categoryName", product.getCategorie().getNom());
+        if (product.getCategorie() != null) {
+            map.put("categoryId", product.getCategorie().getId());
+            map.put("categoryNom", product.getCategorie().getNom());
+            //System.out.println(product.getCategorie().getNom());
+        } else {
+            map.put("categoryId", null);
+            map.put("categoryName", null);
+        }
+        //map.put("categoryId", product.getCategorie().);
+       // map.put("categoryName", product.getCategorie().getNom());
         return map;
     }
     @PUT
