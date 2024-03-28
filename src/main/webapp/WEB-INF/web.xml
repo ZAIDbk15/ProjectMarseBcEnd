@@ -52,11 +52,11 @@
         </servlet-class>
         <init-param>
             <param-name>javax.ws.rs.core.Application</param-name>
-            <param-value>ProjectMarseBcEnd.APIApp</param-value>
+            <param-value>ProjectMarseBcEnd.app.APIApp</param-value>
         </init-param>
     </servlet>
-    <servlet-mapping>
+ <!--   <servlet-mapping>
         <servlet-name>Jersey REST Service</servlet-name>
         <url-pattern>/*</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
 </web-app>

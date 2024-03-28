@@ -102,8 +102,11 @@ public class ProduitCategories implements Serializable {
     public void addProduit(){
 
         if(productToAdd!=null) {
+            produitToAdd.setCategorie(selectedCategorie);
+            // Reattach the entity to the Hibernate session
+          //  productToAdd = produitService.mergeProduit(productToAdd);
             produitService.addProduit(productToAdd);
-            System.out.println("Ajout de la catégorie avec Succès");
+            System.out.println("Ajout de la Produit avec Succès");
             addMessage(FacesMessage.SEVERITY_INFO, "Ajout Réussi", "Ajout de la Produit avec Succès");
         }else {
             addMessage(FacesMessage.SEVERITY_WARN, "Ajout échoué", "Erreur lors de l'ajout de la Produit");
@@ -114,6 +117,7 @@ public class ProduitCategories implements Serializable {
     public void updateProduit(){
         if(selectedProduit!=null) {
             System.out.println("Updating... => "+ selectedProduit);
+            selectedProduit.setCategorie(selectedCategorie);
             produitService.updateProduit(selectedProduit);
             System.out.println("Modification de le produit avec Succès");
             addMessage(FacesMessage.SEVERITY_INFO, "Modification Réussie", "Modification de la Produit avec Succès");

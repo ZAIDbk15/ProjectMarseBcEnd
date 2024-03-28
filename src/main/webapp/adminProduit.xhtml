@@ -80,7 +80,7 @@
                 </h:form>
             </p:row>
             <p:row id="rowEdit">
-                <h:form id="formEdit" rendered="#{produitCategories.editMode}">
+                <h:form id="formEdit" rendered="#{produitCategories.editMode}" enctype="multipart/form-data" >
                     <p:panel header="Mise à jour des données">
                         <h:panelGrid columns="2" id="grid">
                             <h:outputLabel value="designation : *" for="txt_name"/>
@@ -115,7 +115,7 @@
 
             </p:row>
             <p:row id="rowNew">
-                <h:form id="formNew" rendered="#{produitCategories.addMode}">
+                <h:form id="formNew" rendered="#{produitCategories.addMode}" enctype="multipart/form-data" >
                     <p:growl id="msgs"/>
                     <p:panel header="Ajout d'une Nouvelle Catégorie">
                         <h:panelGrid columns="2" id="grid">
