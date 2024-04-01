@@ -53,13 +53,13 @@
 
                             <p:commandButton id="editCateg" value="Editer"
                                              action="#{adminCategories.edit}" update="formEdit"
-                                             ajax="false" icon="ui-icon-circle-check"/>
+                                             ajax="false" icon="ui-icon-circle-check" style="margin: 10px"/>
                             <p:commandButton id="deleteCateg" value="! Supprimer !"
                                              action="#{adminCategories.deleteSelectedCategorie}" update="growl"
-                                             ajax="false" icon="ui-icon-circle-minus"/>
+                                             ajax="false" icon="ui-icon-circle-minus" style="margin: 10px"/>
                             <p:commandButton id="addCateg" value="Ajouter"
                                              action="#{adminCategories.prepareAdd}"
-                                             ajax="false" icon="ui-icon-circle-plus"/>
+                                             ajax="false" icon="ui-icon-circle-plus" style="margin: 10px"/>
 
                         </f:facet>
                         <p:ajax event="rowSelect"/>

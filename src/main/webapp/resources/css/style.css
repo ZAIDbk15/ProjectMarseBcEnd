@@ -1,28 +1,15 @@
-.ui-submenu{
-    font-size: 90%!important;
+body .ui-menu .ui-menu-list .ui-menuitem .ui-menuitem-link {
+	padding: 0em 1rem;
+	width: 100%;
+	border: 0 none;
+	float: none;
+	border-radius: 0;
+	transition: background-color .2s, color .2s, border-color .2s, box-shadow .2s, opacity .2s;
 }
-.ui-menuitem{
-    font-size: 80%!important;
-}
-table.zebra tr:nth-child(odd) td {
-	background-color: #dddddd;
-}
-ui-panelgrid>*>tr,
-.ui-panelgrid .ui-panelgrid-cell {
-    border: none!important;
-}
-.ui-datatable tbody td.wrap {
-    white-space: normal;
-}
-.majMaint {
-    vertical-align: top;
-}
-
-.lblSuivi{
-	display:block;
-	background-color: #c52827;
-	color: #eeeeee;
-	font-size: 120%;
-	width: 170px!important;
-	height: 50px!important;
+#layout-footer {
+	background-color: #b9b9b9;
+	color: #ffffff;
+	text-align: center;
+	text-size:25px;
+	bottom: 0;
 }

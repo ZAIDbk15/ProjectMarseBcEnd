@@ -13,7 +13,6 @@
     <ui:define name="contenu">
         <h:panelGrid>
             <p:row>
-                <h:outputText value="#{produitCategories.path}"></h:outputText>
                 <h:form id="FormTableProds">
                     <!-- 					<p:growl id="growl" showDetail="true" /> -->
                     <p:dataTable id="tblProds" var="prod" value="#{produitCategories.allProduit}"
@@ -77,13 +76,13 @@
 
                             <p:commandButton id="editProd" value="Editer"
                                              action="#{produitCategories.edit}" update="formEdit"
-                                             ajax="false" icon="ui-icon-circle-check"/>
+                                             ajax="false" icon="ui-icon-circle-check" style="margin: 10px"/>
                             <p:commandButton id="deleteProd" value="! Supprimer !"
                                              action="#{produitCategories.deleteSelectedProduit}" update="growl"
-                                             ajax="false" icon="ui-icon-circle-minus"/>
+                                             ajax="false" icon="ui-icon-circle-minus" style="margin: 10px"/>
                             <p:commandButton id="addProd" value="Ajouter"
                                              action="#{produitCategories.prepareAdd}"
-                                             ajax="false" icon="ui-icon-circle-plus"/>
+                                             ajax="false" icon="ui-icon-circle-plus" style="margin: 10px"/>
 
                         </f:facet>
                         <p:ajax event="rowSelect"/>

@@ -100,9 +100,10 @@ public class ProduitCategories implements Serializable {
         productToAdd=new Produit();
         addMode=false;
     }
-
     public void addProduit() {
+
         if (productToAdd != null) {
+            // productToAdd.setCategorie(categService.getCategorieById(idCategorie));
             productToAdd.setCategorie(selectedCategorie);
             produitService.addProduit(productToAdd);
             System.out.println("Ajout du produit avec Succès");

@@ -16,54 +16,37 @@
         </f:facet>
     </h:head>
     <h:body>
-        <p:layout fullPage="true">
-            <p:layoutUnit position="north" size="85" resizable="true"
-                          closable="true" collapsible="true">
-                <p:panelGrid>
-                    <h:form>
-                        <p:column style="width:40%">
-                            <h:link outcome="/index.jsf">
-                                <h:graphicImage library="img" name="logo.png"  width="250" height="50" />
-                            </h:link>
-                        </p:column>
+        <div class="p-grid p-dir-col">
+            <div class="p-col">
+                <div class="box">
+                    <h:form >
+                        <p:menubar id="menu-bar">
+                            <p:menuitem value="NTT DATA STORE" height="100" style="float: left; margin-right: 100px; margin-top: 15px;"/>
+                            <p:menuitem value="Produit" url="./adminProduit.jsf"/>
+                            <p:menuitem value="categore" url="./adminCategorie.jsf"/>
+                        </p:menubar>
+
                     </h:form>
-                    <p:column>
-                        <h:form>
 
-                        </h:form>
-                    </p:column>
-                </p:panelGrid>
-            </p:layoutUnit>
-
-            <p:layoutUnit position="south" size="50" closable="true"
-                          collapsible="true">
-                Footer : Ici CopyRight et coordonnées
-                <h:graphicImage name="img/logo.png" height="50" />
-            </p:layoutUnit>
-
-            <p:layoutUnit position="west" size="200" header="Store Menu"
-                          collapsible="true">
-                <h:form>
-                    <ui:insert name="homeLink"></ui:insert>
-                </h:form>
-                <p:menu toggleable="true">
-                    <ui:insert name="menu">
-                        <p:submenu label="Catalogue" icon="ui-icon-wrench" styleClass="ui-submenu">
-                            <p:menuitem value="Catégories"
-                                        url="./adminCategorie.jsf" icon="ui-icon-script"/>
-                            <p:menuitem value="Produits"
-                                        url="./adminProduit.jsf" icon="ui-icon-clipboard"/>
-                        </p:submenu>
+                </div>
+            </div>
+            <div class="p-col">
+                <div class="box">
+                    <ui:insert name="contenu">
+                        Contenu Principal en Foncion de l'opération choisie<br />
                     </ui:insert>
-                </p:menu>
-            </p:layoutUnit>
-            <p:layoutUnit position="center" resizable="true" size="1200"
-                          minSize="800" maxSize="1400">
-                <ui:insert name="contenu">
-                    Contenu Principal en Foncion de l'opération choisie<br />
-                </ui:insert>
-            </p:layoutUnit>
-        </p:layout>
+                </div>
+            </div>
+
+            <div class="p-col" id="layout-footer">
+                <div class="box">
+                    Ntt Data Store
+                    <h:graphicImage name="img/logo.png" height="50" />
+
+                </div>
+            </div>
+        </div>
+
     </h:body>
 </f:view>
 
