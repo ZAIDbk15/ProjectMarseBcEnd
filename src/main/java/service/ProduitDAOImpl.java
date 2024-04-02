@@ -37,19 +37,22 @@ public class ProduitDAOImpl implements Serializable, ProduitDAO{
     }
 
     public void addProduit(Produit produit) {
-        Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.persist(produit);
-        session.getTransaction().commit();
-        logger.info("Product successfully saved, Product Details="+produit);
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Produit attachedProduit = (Produit) session.merge(produit); // Reattach the detached entity
+            session.persist(attachedProduit);
+            session.getTransaction().commit();
+            logger.info("Product successfully saved, Product Details=" + attachedProduit);
+        }
     }
 
     public void updateProduit(Produit produit){
-        Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.merge(produit);
-        session.getTransaction().commit();
-        logger.info("Product successfully updated, Product Details="+produit);
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(produit);
+            session.getTransaction().commit();
+            logger.info("Product successfully updated, Product Details=" + produit);
+        }
     }
     public List<Produit> listProduits(){
         Session session = this.sessionFactory.getCurrentSession();
@@ -84,15 +87,15 @@ public class ProduitDAOImpl implements Serializable, ProduitDAO{
     }
 
     public void removeProduit(int id){
-        Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        Produit produit = session.getReference(Produit.class, Integer.valueOf(id));
-
-        if(null != produit){
-            session.delete(produit);
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Produit produit = session.getReference(Produit.class, id);
+            if (produit != null) {
+                session.delete(produit);
+                logger.info("Product deleted successfully, Product details=" + produit);
+            }
+            session.getTransaction().commit();
         }
-        session.getTransaction().commit();
-        logger.info("Product deleted successfully, Product details="+produit);
     }
 
 

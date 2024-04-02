@@ -34,13 +34,12 @@ public class CategorieDAOImpl implements CategorieDAO {
 
     @Override
     public void addCategorie(Categorie categorie) {
-        Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.persist(categorie);
-        session.getTransaction().commit();
-        logger.info("Categorie saved successfully, Categorie Details="+categorie);
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.persist(categorie);
+            session.getTransaction().commit();
+        }
     }
-
     @Override
     public void updateCategorie(Categorie categorie) {
         Session session = this.sessionFactory.getCurrentSession();
@@ -84,27 +83,25 @@ public class CategorieDAOImpl implements CategorieDAO {
     }
     @Override
     public Categorie getCategorieById(int id) {
-        Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        Categorie categorie =  session.getReference(Categorie.class, Integer.valueOf(id));
-        session.getTransaction().commit();
-        logger.info("Categorie loaded successfully, Categorie details="+categorie);
-        return categorie;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Categorie categorie = session.getReference(Categorie.class, id);
+            session.getTransaction().commit();
+            return categorie;
+        }
     }
 
     @Override
     public void removeCategorie(int id) {
-        Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        Categorie categorie = session.getReference(Categorie.class, Integer.valueOf(id));
-
-        if(null != categorie){
-            session.delete(categorie);
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            Categorie categorie = session.getReference(Categorie.class, id);
+            if (categorie != null) {
+                session.delete(categorie);
+            }
+            session.getTransaction().commit();
         }
-        session.getTransaction().commit();
-        logger.info("Categorie deleted successfully, Categorie details="+categorie);
     }
-
     public int productsCount(Categorie categorie) {
         Session session = this.sessionFactory.openSession();
         session.beginTransaction();
